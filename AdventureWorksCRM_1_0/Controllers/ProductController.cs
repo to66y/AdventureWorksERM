@@ -20,8 +20,7 @@ namespace AdventureWorksCRM_1_0.Controllers
         public async Task<IActionResult> Index(int page = 1)
         {
             //var queue = Repository.Products;
-            var queue = await PagedList<Product>.AsPagedAsync(Repository.Products,
-                page, 7);
+            var queue = await PagedList<Product>.AsPagedAsync(Repository.Products, pageIndex: page, pageSize: 7);
             return View(queue);
         }
     }

@@ -49,7 +49,7 @@ namespace AdventureWorksCRM_1_0_Test
             var mock = new Mock<IProductRepository>();
             mock.SetupGet(p => p.Products).Returns(products);
 
-            var controller = new ProductController(ProductsRepository);
+            var controller = new ProductController(mock.Object);
             var result = (controller.Index().Result as ViewResult)?.ViewData.Model as PagedList<Product>;
             Assert.Equal(controller.Repository.Products, result);
         }
