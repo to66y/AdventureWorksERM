@@ -1,0 +1,79 @@
+﻿@model PagedList<Employee>
+@{
+    ViewData["Title"] = "Staff";
+    Layout = "_Layout";
+}
+<div class="bg-dark text-center text-white h4">Staff</div>
+<p>
+    <a class="btn btn-dark" asp-action="Create">Create New</a>
+</p>
+<form id="form">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Name
+                </th>
+                <th>
+                    @nameof(Employee.JobTitle)
+                </th>
+                <th>
+                    @nameof(Employee.BirthDate)
+                </th>
+                <th>
+                    @nameof(Employee.MaritalStatus)
+                </th>
+                <th>
+                    @nameof(Employee.Gender)
+                </th>
+                <th>
+                    @nameof(Employee.HireDate)
+                </th>
+                <th>
+                    @nameof(Employee.VacationHours)
+                </th>
+                <th>
+                    @nameof(Employee.SickLeaveHours)
+                </th>
+            </tr>
+        </thead>
+        <tbody id="body1" class="text-center">
+            @foreach (Employee employee in Model)
+            {
+                <tr>
+                    <td>
+                        @employee.BusinessEntity.FirstName
+                        @employee.BusinessEntity.LastName
+                    </td>
+                    <td>
+                        @employee.JobTitle
+                    </td>
+                    <td>
+                        @employee.BirthDate.ToShortDateString()
+                    </td>
+                    <td>
+                        @employee.MaritalStatus
+                    </td>
+                    <td>
+                        @employee.Gender
+                    </td>
+                    <td>
+                        @employee.HireDate.ToShortDateString()
+                    </td>
+                    <td>
+                        @employee.VacationHours
+                    </td>
+                    <td>
+                        @employee.SickLeaveHours
+                    </td>
+                    <td>
+                        <a class="btn btn-dark p-0" asp-action="Edit" asp-route-id="@employee.BusinessEntityId">Edit</a>
+                        <a class="btn btn-dark p-0" asp-action="Details" asp-route-id="@employee.BusinessEntityId">Details</a>
+                        <a class="btn btn-dark p-0" asp-action="Delete" asp-route-id="@employee.BusinessEntityId">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    @await Html.PartialAsync("_PagedView")
+</form>
