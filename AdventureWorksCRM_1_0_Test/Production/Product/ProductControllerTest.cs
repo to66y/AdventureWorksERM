@@ -1,5 +1,5 @@
-﻿using AdventureWorksCRM_1_0.Controllers;
-using AdventureWorksCRM_1_0.Models;
+﻿using AdventureWorksERM.Controllers;
+using AdventureWorksERM.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,10 +7,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 using Moq;
-using AdventureWorksCRM_1_0.Models.AppDbContext;
+using AdventureWorksERM.Models.AppDbContext;
 using Microsoft.AspNetCore.Mvc;
-using AdventureWorksCRM_1_0.Infrastructure;
-using AdventureWorksCRM_1_0.Models.Helpers;
+using AdventureWorksERM.Models.Helpers;
 
 namespace AdventureWorksCRM_1_0_Test
 {

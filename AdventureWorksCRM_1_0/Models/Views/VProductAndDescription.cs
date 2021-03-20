@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 #nullable disable
 
-namespace AdventureWorksCRM_1_0.Models.AppDbContext
+namespace AdventureWorksERM.Models.AppDbContext
 {
     public partial class VProductAndDescription
     {

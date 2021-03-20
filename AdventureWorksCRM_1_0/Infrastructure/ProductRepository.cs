@@ -1,5 +1,5 @@
-﻿using AdventureWorksCRM_1_0.Controllers;
-using AdventureWorksCRM_1_0.Models.AppDbContext;
+﻿using AdventureWorksERM.Controllers;
+using AdventureWorksERM.Models.AppDbContext;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 using System.Collections;
 
-namespace AdventureWorksCRM_1_0.Infrastructure
+namespace AdventureWorksERM.Infrastructure
 {
     public class ProductRepository : IRepository<Product>
     {

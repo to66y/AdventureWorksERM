@@ -1,4 +1,4 @@
-using AdventureWorksCRM_1_0.Models.AppDbContext;
+using AdventureWorksERM.Models.AppDbContext;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -10,10 +10,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AdventureWorksCRM_1_0.Controllers;
-using AdventureWorksCRM_1_0.Infrastructure;
+using AdventureWorksERM.Controllers;
+using AdventureWorksERM.Infrastructure;
 
-namespace AdventureWorksCRM_1_0
+namespace AdventureWorksERM
 {
     public class Startup
     {
@@ -32,6 +32,7 @@ namespace AdventureWorksCRM_1_0
             services.AddDbContext<AdventureWorksContext>(options =>
                 options.UseSqlServer(connString));
             services.AddTransient<IRepository<Product>, ProductRepository>();
+            services.AddTransient<IRepository<ProductCategory>, CategoriesRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

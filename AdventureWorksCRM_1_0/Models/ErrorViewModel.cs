@@ -1,6 +1,6 @@
 using System;
 
-namespace AdventureWorksCRM_1_0.Models
+namespace AdventureWorksERM.Models
 {
     public class ErrorViewModel
     {

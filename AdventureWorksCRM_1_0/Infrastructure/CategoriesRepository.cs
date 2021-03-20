@@ -1,5 +1,5 @@
-﻿using AdventureWorksCRM_1_0.Controllers;
-using AdventureWorksCRM_1_0.Models.AppDbContext;
+﻿using AdventureWorksERM.Controllers;
+using AdventureWorksERM.Models.AppDbContext;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -10,7 +10,7 @@ namespace AdventureWorksERM.Infrastructure
 {
     public class CategoriesRepository : IRepository<ProductCategory>
     {
-        public IEnumerable<ProductCategory> Storage => _context.ProductCategories.Include("ProductSubcategory").ToArray();
+        public IEnumerable<ProductCategory> Storage => _context.ProductCategories.ToArray();
 
         private AdventureWorksContext _context;
 

@@ -1,5 +1,5 @@
-﻿using AdventureWorksCRM_1_0.Models;
-using AdventureWorksCRM_1_0.Models.AppDbContext;
+﻿using AdventureWorksERM.Models;
+using AdventureWorksERM.Models.AppDbContext;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.Extensions.Logging;
@@ -9,7 +9,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace AdventureWorksCRM_1_0.Controllers
+namespace AdventureWorksERM.Controllers
 {
     public class HomeController : Controller
     {

@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using AdventureWorksCRM_1_0.Models.AppDbContext;
-using AdventureWorksCRM_1_0.Models.Helpers;
+using AdventureWorksERM.Models.AppDbContext;
+using AdventureWorksERM.Models.Helpers;
 
-namespace AdventureWorksCRM_1_0.Controllers
+namespace AdventureWorksERM.Controllers
 {
     public class StaffController : Controller
     {

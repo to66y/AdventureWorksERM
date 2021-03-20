@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace AdventureWorksCRM_1_0
+namespace AdventureWorksERM
 {
     public class Program
     {

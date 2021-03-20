@@ -1,8 +1,8 @@
-﻿using AdventureWorksCRM_1_0.Models.AppDbContext;
+﻿using AdventureWorksERM.Models.AppDbContext;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace AdventureWorksCRM_1_0.Controllers
+namespace AdventureWorksERM.Controllers
 {
     public interface IRepository<T> where T : class
     {
