@@ -6,7 +6,7 @@ namespace AdventureWorksERM.Controllers
 {
     public interface IRepository<T> where T : class
     {
-        IEnumerable<T> Storage { get; }
+        IQueryable<T> Storage { get; }
         void Add(T p);
     }
 }

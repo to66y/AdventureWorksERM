@@ -17,42 +17,42 @@ namespace AdventureWorksCRM_1_0_Test
     {
         public class FakeProductsRepository : IRepository<Product>
         {
-            public IEnumerable<Product> Storage => _products;
-            Product[] _products = new Product[]
+            public IQueryable<Product> Storage => _products;
+            IQueryable<Product> _products = new List<Product>
             {
                 new Product(){ Name="Name1", Class="Class1", Color="Color1" },
                 new Product(){ Name="Name2", Class="Class2", Color="Color2"  },
                 new Product(){ Name="Name3", Class="Class3", Color="Color3"  },
                 new Product(){ Name="Name4", Class="Class4", Color="Color4"  },
 
-            };
+            }.AsQueryable();
 
             public void Add(Product p) { }
         }
 
         public class FakeCategoriesRepository: IRepository<ProductCategory>
         {
-            public IEnumerable<ProductCategory> Storage => _categories;
-            ProductCategory[] _categories = new ProductCategory[]
+            public IQueryable<ProductCategory> Storage => _categories;
+            IQueryable<ProductCategory> _categories = new List<ProductCategory>
             {
                 new ProductCategory(){ Name="Cat1", },
                 new ProductCategory(){ Name="Cat2", },
                 new ProductCategory(){ Name="Cat3", },
                 new ProductCategory(){ Name="Cat4", },
 
-            };
+            }.AsQueryable<ProductCategory>();
 
             public void Add(ProductCategory p) { }
         }
-        private ProductController ReturnFakeProductController(Product[] products)
+        private ProductController ReturnFakeProductController()
         {
             string[] categoryNames = new string[] { "Cat1", "Cat2", "Cat3" };
             var mockProductRepo = new Mock<IRepository<Product>>();
             //var mockCategoryRepo = new Mock<IRepository<ProductCategory>>();
             //var mockProductCats = new Mock<IEnumerable<ProductCategory>>();
-            mockProductRepo.SetupGet(p => p.Storage).Returns(products);
+            //mockProductRepo.SetupGet(p => p.Storage).Returns(ProductsRepository);
             //mockCategoryRepo.SetupGet(pc => pc.Storage).Returns(mockProductCats.Object);
-            return new ProductController(mockProductRepo.Object, CategoriesRepository);
+            return new ProductController(ProductsRepository, CategoriesRepository);
         }
 
         public IRepository<Product> ProductsRepository { get => new FakeProductsRepository(); }
@@ -63,15 +63,15 @@ namespace AdventureWorksCRM_1_0_Test
         [Fact]
         public void HasProductController()
         {
-            var controller = ReturnFakeProductController(ProductsRepository.Storage.ToArray());
+            var controller = ReturnFakeProductController();
             Assert.NotNull(controller);
         }
 
-        [Theory]
-        [ClassData(typeof(ProductTestData))]
-        public void ProductControllerReturnProduct(Product[] products)
+        [Fact]
+        //[ClassData(typeof(ProductTestData))]
+        public void ProductControllerReturnProduct()
         {
-            ProductController controller = ReturnFakeProductController(products);
+            ProductController controller = ReturnFakeProductController();
             var result = (controller.Index().Result as ViewResult)?.ViewData.Model as PagedList<Product>;
             Assert.Equal(controller.ProductRepository.Storage, result);
         }
@@ -79,10 +79,10 @@ namespace AdventureWorksCRM_1_0_Test
         [Fact]
         public void ProductControllerHasViewBagCategory()
         {
-            ProductController controller = ReturnFakeProductController(ProductsRepository.Storage.ToArray());
+            ProductController controller = ReturnFakeProductController();
             var result = controller.Index().Result;
             var category = controller.ViewBag.Category;
-            Assert.Equal("Cat1", category[0].Name);
+            Assert.Equal("Cat1", (category as IQueryable<ProductCategory>).First().Name);
         }
     }
 }

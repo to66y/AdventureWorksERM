@@ -10,7 +10,7 @@ namespace AdventureWorksERM.Infrastructure
 {
     public class CategoriesRepository : IRepository<ProductCategory>
     {
-        public IEnumerable<ProductCategory> Storage => _context.ProductCategories.ToArray();
+        public IQueryable<ProductCategory> Storage => _context.ProductCategories;
 
         private AdventureWorksContext _context;
 

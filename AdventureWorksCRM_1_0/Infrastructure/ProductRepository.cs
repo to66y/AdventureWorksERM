@@ -12,7 +12,7 @@ namespace AdventureWorksERM.Infrastructure
 {
     public class ProductRepository : IRepository<Product>
     {
-        public IEnumerable<Product> Storage => _context.Products.Include("ProductModel").Include("ProductSubcategory").ToArray();
+        public IQueryable<Product> Storage => _context.Products.Include("ProductModel").Include("ProductSubcategory");
 
         public readonly AdventureWorksContext _context;
         public ProductRepository(AdventureWorksContext context) => _context = context;

@@ -21,7 +21,7 @@ namespace AdventureWorksERM.Controllers
         }
         public async Task<IActionResult> Index(string category="", int page = 1)
         {
-            //ViewBag.Category = CategoryRepository.Storage.Where(pc => pc.Name.Contains(category)).ToArray();
+            ViewBag.Category = CategoryRepository.Storage.Where(pc => pc.Name.Contains(category));
             var queue = await PagedList<Product>.AsPagedAsync(ProductRepository.Storage, pageIndex: page, pageSize: 7);
             return View(queue);
         }
