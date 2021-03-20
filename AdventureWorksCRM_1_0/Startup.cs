@@ -31,7 +31,7 @@ namespace AdventureWorksCRM_1_0
             string connString = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<AdventureWorksContext>(options =>
                 options.UseSqlServer(connString));
-            services.AddTransient<IProductRepository, ProductRepository>();
+            services.AddTransient<IRepository<Product>, ProductRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

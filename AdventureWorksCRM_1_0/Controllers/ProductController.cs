@@ -11,16 +11,18 @@ namespace AdventureWorksCRM_1_0.Controllers
 {
     public class ProductController : Controller
     {
-        public IProductRepository Repository { get; }
+        public IRepository<Product> ProductRepository { get; }
+        public IRepository<ProductCategory> CategoryRepository { get; }
 
-        public ProductController(IProductRepository repo)
+        public ProductController(IRepository<Product> prodRepo, IRepository<ProductCategory> catRepo)
         {
-            Repository = repo;
+            ProductRepository = prodRepo;
+            CategoryRepository = catRepo;
         }
-        public async Task<IActionResult> Index(int page = 1)
+        public async Task<IActionResult> Index(string category="", int page = 1)
         {
-            //var queue = Repository.Products;
-            var queue = await PagedList<Product>.AsPagedAsync(Repository.Products, pageIndex: page, pageSize: 7);
+            ViewBag.Category = CategoryRepository.Storage.Where(pc => pc.Name.Contains(category)).ToArray();
+            var queue = await PagedList<Product>.AsPagedAsync(ProductRepository.Storage, pageIndex: page, pageSize: 7);
             return View(queue);
         }
     }

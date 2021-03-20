@@ -4,9 +4,9 @@ using System.Linq;
 
 namespace AdventureWorksCRM_1_0.Controllers
 {
-    public interface IProductRepository
+    public interface IRepository<T> where T : class
     {
-        IEnumerable<Product> Products { get; }
-        void AddProduct(Product p);
+        IEnumerable<T> Storage { get; }
+        void Add(T p);
     }
 }

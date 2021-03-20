@@ -10,15 +10,16 @@ using System.Collections;
 
 namespace AdventureWorksCRM_1_0.Infrastructure
 {
-    public class ProductRepository : IProductRepository
+    public class ProductRepository : IRepository<Product>
     {
-        public IEnumerable<Product> Products => _context.Products.Include("ProductModel").Include("ProductSubcategory").ToArray();
+        public IEnumerable<Product> Storage => _context.Products.Include("ProductModel").Include("ProductSubcategory").ToArray();
 
         public readonly AdventureWorksContext _context;
         public ProductRepository(AdventureWorksContext context) => _context = context;
-        public void AddProduct(Product p)
+        public void Add(Product p)
         {
             _context.Products.Add(p);
+            _context.SaveChanges();
         }
     }
 }
