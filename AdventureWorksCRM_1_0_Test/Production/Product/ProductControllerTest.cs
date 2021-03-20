@@ -10,79 +10,73 @@ using Moq;
 using AdventureWorksERM.Models.AppDbContext;
 using Microsoft.AspNetCore.Mvc;
 using AdventureWorksERM.Models.Helpers;
+using Microsoft.EntityFrameworkCore;
 
 namespace AdventureWorksCRM_1_0_Test
 {
     public class ProductControllerTest
     {
-        public class FakeProductsRepository : IRepository<Product>
+        public AdventureWorksContext context;
+        public Product[] ProductForCompare = new Product[]
         {
-            public IQueryable<Product> Storage => _products;
-            IQueryable<Product> _products = new List<Product>
-            {
-                new Product(){ Name="Name1", Class="Class1", Color="Color1" },
-                new Product(){ Name="Name2", Class="Class2", Color="Color2"  },
-                new Product(){ Name="Name3", Class="Class3", Color="Color3"  },
-                new Product(){ Name="Name4", Class="Class4", Color="Color4"  },
-
-            }.AsQueryable();
-
-            public void Add(Product p) { }
-        }
-
-        public class FakeCategoriesRepository: IRepository<ProductCategory>
+            new Product { Name = "Prod1", Class = "Class1" },
+            new Product { Name = "Prod2", Class = "Class2" },
+            new Product { Name = "Prod3", Class = "Class3" },
+        };
+        
+        public ProductCategory[] ProductCategoryForCompare = new ProductCategory[]
         {
-            public IQueryable<ProductCategory> Storage => _categories;
-            IQueryable<ProductCategory> _categories = new List<ProductCategory>
-            {
-                new ProductCategory(){ Name="Cat1", },
-                new ProductCategory(){ Name="Cat2", },
-                new ProductCategory(){ Name="Cat3", },
-                new ProductCategory(){ Name="Cat4", },
+            new ProductCategory { Name = "Cat1", },
+            new ProductCategory { Name = "Cat2", },
+            new ProductCategory { Name = "Cat3", },
+        };
 
-            }.AsQueryable<ProductCategory>();
-
-            public void Add(ProductCategory p) { }
-        }
-        private ProductController ReturnFakeProductController()
+        private void InitTestDB()
         {
-            string[] categoryNames = new string[] { "Cat1", "Cat2", "Cat3" };
-            var mockProductRepo = new Mock<IRepository<Product>>();
-            //var mockCategoryRepo = new Mock<IRepository<ProductCategory>>();
-            //var mockProductCats = new Mock<IEnumerable<ProductCategory>>();
-            //mockProductRepo.SetupGet(p => p.Storage).Returns(ProductsRepository);
-            //mockCategoryRepo.SetupGet(pc => pc.Storage).Returns(mockProductCats.Object);
-            return new ProductController(ProductsRepository, CategoriesRepository);
-        }
+            var options = new DbContextOptionsBuilder<AdventureWorksContext>()
+                .UseInMemoryDatabase(databaseName: "AWListDatabase")
+                .Options;
 
-        public IRepository<Product> ProductsRepository { get => new FakeProductsRepository(); }
-        public IRepository<ProductCategory> CategoriesRepository{ get => new FakeCategoriesRepository(); }
+            context = new AdventureWorksContext(options);
+            context.Products.Add(new Product { Name = "Prod1", Class = "Class1" });
+            context.Products.Add(new Product { Name = "Prod2", Class = "Class2" });
+            context.Products.Add(new Product { Name = "Prod3", Class = "Class3" });
+            context.ProductCategories.Add(new ProductCategory { Name = "Cat1" });
+            context.ProductCategories.Add(new ProductCategory { Name = "Cat2" });
+            context.ProductCategories.Add(new ProductCategory { Name = "Cat3" });
+
+            context.SaveChanges();
+        }
+        private ProductController GetFakeProductController()
+        {
+            InitTestDB();
+            return new ProductController(context.Products, context.ProductCategories);//GetFakeProducts(), GetFakeProductCategories());
+        }
 
 
 
         [Fact]
         public void HasProductController()
         {
-            var controller = ReturnFakeProductController();
+            var controller = GetFakeProductController();
             Assert.NotNull(controller);
         }
 
         [Fact]
-        //[ClassData(typeof(ProductTestData))]
-        public void ProductControllerReturnProduct()
+        public async void ProductControllerReturnProduct()
         {
-            ProductController controller = ReturnFakeProductController();
-            var result = (controller.Index().Result as ViewResult)?.ViewData.Model as PagedList<Product>;
-            Assert.Equal(controller.ProductRepository.Storage, result);
+            ProductController controller = GetFakeProductController();
+            var viewResult = (await controller.Index() as ViewResult)?.ViewData.Model as PagedList<Product>;
+            Assert.NotNull(viewResult);
         }
 
         [Fact]
         public void ProductControllerHasViewBagCategory()
         {
-            ProductController controller = ReturnFakeProductController();
-            var result = controller.Index().Result;
-            var category = controller.ViewBag.Category;
-            Assert.Equal("Cat1", (category as IQueryable<ProductCategory>).First().Name);
+            ProductController controller = GetFakeProductController();
+            var result = controller.Index();
+            var category = controller.ViewBag.Category as IQueryable<ProductCategory>;
+            Assert.NotNull(category);
         }
     }
 }

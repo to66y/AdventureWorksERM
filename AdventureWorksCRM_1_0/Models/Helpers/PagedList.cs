@@ -21,10 +21,11 @@ namespace AdventureWorksERM.Models.Helpers
         public bool HasPrevious => PageIndex > 1;
         public bool HasNext => PageIndex < PageTotal;
 
-        public static async Task<PagedList<T>>AsPagedAsync(IEnumerable<T> source, int pageIndex, int pageSize)
+        public static async Task<PagedList<T>>AsPagedAsync(IQueryable<T> source, int pageIndex, int pageSize)
         {
-            var count = await Task.Run(()=> source.Count());
-            var items = await Task.Run(()=> source.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList());
+            var count = await source.CountAsync(); //await Task.Run(()=> source.Count());
+            var items = await source.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+            //Task.Run(()=> source.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList());
             return new PagedList<T>(items, count, pageIndex, pageSize);
         }
     }

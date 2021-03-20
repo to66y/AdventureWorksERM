@@ -21,5 +21,10 @@ namespace AdventureWorksERM.Infrastructure
             _context.Add(p);
             _context.SaveChanges();
         }
+
+        public IQueryable<ProductCategory> GetAll()
+        {
+            return _context.ProductCategories;
+        }
     }
 }

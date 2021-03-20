@@ -8,5 +8,6 @@ namespace AdventureWorksERM.Controllers
     {
         IQueryable<T> Storage { get; }
         void Add(T p);
+        IQueryable<T> GetAll();
     }
 }

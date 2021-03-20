@@ -14,12 +14,17 @@ namespace AdventureWorksERM.Infrastructure
     {
         public IQueryable<Product> Storage => _context.Products.Include("ProductModel").Include("ProductSubcategory");
 
-        public readonly AdventureWorksContext _context;
+        private readonly AdventureWorksContext _context;
         public ProductRepository(AdventureWorksContext context) => _context = context;
         public void Add(Product p)
         {
             _context.Products.Add(p);
             _context.SaveChanges();
+        }
+
+        public IQueryable<Product> GetAll()
+        {
+            return _context.Products;
         }
     }
 }
