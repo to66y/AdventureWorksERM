@@ -13,17 +13,21 @@ namespace AdventureWorksERM.Controllers
     {
         public IQueryable<Product> ProductRepository { get; }
         public IQueryable<ProductCategory> CategoryRepository { get; }
+        private AdventureWorksContext _context;
 
-        public ProductController(IQueryable<Product> prodRepo, IQueryable<ProductCategory> catRepo)
+        public ProductController(AdventureWorksContext context)
         {
-            ProductRepository = prodRepo;
-            CategoryRepository = catRepo;
+            _context = context;
         }
         public async Task<IActionResult> Index(string category = "", int page = 1)
         {
-            ViewBag.Category = CategoryRepository;
-            var queue = await PagedList<Product>.AsPagedAsync(ProductRepository, pageIndex: page, pageSize: 7);
-            return View(queue);
+            ViewBag.Category = _context.ProductCategories.Where(x=> x.Name.Contains(category)).FirstOrDefault();
+            ProductCategory cat = ViewBag.Category;
+            var products = _context.Products.Where(x=>x.ProductSubcategory.ProductCategoryId==cat.ProductCategoryId)
+                .Include("ProductModel")
+                .Include("ProductSubcategory");
+            var result = await PagedList<Product>.AsPagedAsync(products, pageIndex: page, pageSize: 7);
+            return View(result);
         }
     }
 }

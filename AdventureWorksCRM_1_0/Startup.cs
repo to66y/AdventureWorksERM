@@ -31,8 +31,8 @@ namespace AdventureWorksERM
             string connString = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<AdventureWorksContext>(options =>
                 options.UseSqlServer(connString));
-            services.AddTransient<IRepository<Product>, ProductRepository>();
-            services.AddTransient<IRepository<ProductCategory>, CategoriesRepository>();
+            //services.AddTransient<IRepository<Product>, ProductRepository>();
+            //services.AddTransient<IRepository<ProductCategory>, CategoriesRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

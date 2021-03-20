@@ -50,7 +50,7 @@ namespace AdventureWorksCRM_1_0_Test
         private ProductController GetFakeProductController()
         {
             InitTestDB();
-            return new ProductController(context.Products, context.ProductCategories);//GetFakeProducts(), GetFakeProductCategories());
+            return new ProductController(context);//.Products, context.ProductCategories);
         }
 
 

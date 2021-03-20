@@ -23,9 +23,8 @@ namespace AdventureWorksERM.Models.Helpers
 
         public static async Task<PagedList<T>>AsPagedAsync(IQueryable<T> source, int pageIndex, int pageSize)
         {
-            var count = await source.CountAsync(); //await Task.Run(()=> source.Count());
+            var count = await source.CountAsync();
             var items = await source.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
-            //Task.Run(()=> source.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList());
             return new PagedList<T>(items, count, pageIndex, pageSize);
         }
     }
