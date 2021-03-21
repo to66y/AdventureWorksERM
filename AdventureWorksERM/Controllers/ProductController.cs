@@ -21,11 +21,22 @@ namespace AdventureWorksERM.Controllers
         }
         public async Task<IActionResult> Index(string category = "", int page = 1)
         {
-            ViewBag.Category = _context.ProductCategories.Where(x=> x.Name.Contains(category)).FirstOrDefault();
-            ProductCategory cat = ViewBag.Category;
-            var products = _context.Products.Where(x=>x.ProductSubcategory.ProductCategoryId==cat.ProductCategoryId)
+            IQueryable<Product> products;
+            if (String.IsNullOrEmpty(category))
+            {
+                products = _context.Products
                 .Include("ProductModel")
                 .Include("ProductSubcategory");
+                ViewBag.Category = "None";
+            }
+            else
+            {
+                ViewBag.Category = _context.ProductCategories.Where(x => x.Name.Contains(category)).FirstOrDefault();
+                ProductCategory cat = ViewBag.Category;
+                products = _context.Products.Where(x => x.ProductSubcategory.ProductCategoryId == cat.ProductCategoryId)
+                    .Include("ProductModel")
+                    .Include("ProductSubcategory");
+            }
             var result = await PagedList<Product>.AsPagedAsync(products, pageIndex: page, pageSize: 7);
             return View(result);
         }

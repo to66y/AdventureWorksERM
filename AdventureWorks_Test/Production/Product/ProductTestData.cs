@@ -3,7 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace AdventureWorksCRM_1_0_Test
+namespace AdventureWorksERM_Test
 {
     internal class ProductTestData : IEnumerable<object[]>
     {

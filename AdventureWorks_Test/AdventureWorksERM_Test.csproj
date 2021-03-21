@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AdventureWorksCRM_1_0\AdventureWorksERM.csproj" />
+    <ProjectReference Include="..\AdventureWorksERM\AdventureWorksERM.csproj" />
   </ItemGroup>
 
 </Project>
