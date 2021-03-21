@@ -1,10 +1,16 @@
 ﻿@{
-    var prevDisabled = !Model.HasPrevious ? "disabled" : "";
-    var nextDisabled = !Model.HasNext ? "disabled" : "";
+    var disabledPrev = Model.PageInfo.HasPreviousPage ? "" : "disabled";
+    var disabledNext = Model.PageInfo.HasNextPage ? "" : "disabled";
 }
-<a id="prev" class="btn btn-dark @prevDisabled" asp-action="Index" asp-route-Page="@(Model.PageIndex - 1)">
-    <<
+<a asp-action="Index"
+   asp-route-page="@(Model.PageInfo.PageNumber - 1)"
+   asp-route-category="@(Model.CategoryInfo.SelectedCategory)"
+   class="btn btn-outline-dark @disabledPrev">
+    &lArr;
 </a>
-<a id="next" class="btn btn-dark @nextDisabled" asp-action="Index" asp-route-Page="@(Model.PageIndex + 1)">
-    >>
+<a asp-action="Index"
+   asp-route-page="@(Model.PageInfo.PageNumber + 1)"
+   asp-route-category="@(Model.CategoryInfo.SelectedCategory)"
+   class="btn btn-outline-dark @disabledNext">
+    &rArr;
 </a>

@@ -11,6 +11,7 @@ using AdventureWorksERM.Models.AppDbContext;
 using Microsoft.AspNetCore.Mvc;
 using AdventureWorksERM.Models.Helpers;
 using Microsoft.EntityFrameworkCore;
+using AdventureWorksERM.Models.Production.ViewModels;
 
 namespace AdventureWorksERM_Test
 {
@@ -49,32 +50,32 @@ namespace AdventureWorksERM_Test
         }
 
         [Fact]
-        public async void ProductControllerReturnProduct()
+        public async void ReturnSomething()
         {
             var context = InitTestDB();
             ProductController controller = new ProductController(context);
-            var viewResult = (await controller.Index() as ViewResult)?.ViewData.Model as PagedList<Product>;
+            var viewResult = (await controller.Index(null) as ViewResult)?.ViewData.Model;
             Assert.NotNull(viewResult);
         }
 
         [Fact]
-        public void ProductControllerHasViewBagCategory()
+        public async void NullCategory()
         {
             var context = InitTestDB();
             ProductController controller = new ProductController(context);
-            var result = Task.FromResult(controller.Index());
-            var category = controller.ViewBag.Category;
-            Assert.NotNull(category);
+            int? category = null;
+            var result = (await controller.Index(category) as ViewResult)?.ViewData.Model as ProductsViewModel;
+            Assert.NotEmpty(result.Products);
         }
 
         [Fact]
-        public async void ProductControllerFilterByCategory()
+        public async void FilterByCategory()
         {
             var context = InitTestDB();
             ProductController controller = new ProductController(context);
-            string category = "Cat1";
-            var model = (await controller.Index(category) as ViewResult)?.ViewData.Model as PagedList<Product>;
-            Assert.Equal("Prod1", model.First().Name);
+            int? category = 1;
+            var model = (await controller.Index(category) as ViewResult)?.ViewData.Model as ProductsViewModel;
+            Assert.Equal("Prod1", model.Products.First().Name);
         }
     }
 }

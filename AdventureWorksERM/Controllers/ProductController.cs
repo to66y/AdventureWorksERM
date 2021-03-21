@@ -6,39 +6,45 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using AdventureWorksERM.Models.Helpers;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using AdventureWorksERM.Models.Production.ViewModels;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace AdventureWorksERM.Controllers
 {
     public class ProductController : Controller
     {
-        public IQueryable<Product> ProductRepository { get; }
-        public IQueryable<ProductCategory> CategoryRepository { get; }
         private AdventureWorksContext _context;
 
         public ProductController(AdventureWorksContext context)
         {
             _context = context;
         }
-        public async Task<IActionResult> Index(string category = "", int page = 1)
+        public async Task<IActionResult> Index(int? category, int page = 1)
         {
-            IQueryable<Product> products;
-            if (String.IsNullOrEmpty(category))
+            var source = _context.Products.Include("ProductModel")
+                             .Include("ProductSubcategory");
+
+            if (category != null && category != 0)
             {
-                products = _context.Products
-                .Include("ProductModel")
-                .Include("ProductSubcategory");
-                ViewBag.Category = "None";
+                source = _context.Products.Where(x => x.ProductSubcategory.ProductCategoryId == category)
+                            .Include("ProductModel")
+                             .Include("ProductSubcategory");
             }
-            else
+            var pageSize = 10;
+            var count = await source.CountAsync();
+            var items = await source.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
+
+            PageInfo pageInfo = new PageInfo(count, page, pageSize);
+            CategoryInfo categoryInfo = new CategoryInfo(await _context.ProductCategories.ToListAsync(), category);
+            ProductsViewModel productsViewModel = new ProductsViewModel
             {
-                ViewBag.Category = _context.ProductCategories.Where(x => x.Name.Contains(category)).FirstOrDefault();
-                ProductCategory cat = ViewBag.Category;
-                products = _context.Products.Where(x => x.ProductSubcategory.ProductCategoryId == cat.ProductCategoryId)
-                    .Include("ProductModel")
-                    .Include("ProductSubcategory");
-            }
-            var result = await PagedList<Product>.AsPagedAsync(products, pageIndex: page, pageSize: 7);
-            return View(result);
+                Products = items,
+                PageInfo = pageInfo,
+                CategoryInfo = categoryInfo,
+            };
+
+            return View(productsViewModel);
         }
     }
 }

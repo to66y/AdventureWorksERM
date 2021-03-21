@@ -1,42 +1,51 @@
-﻿@model IEnumerable<AdventureWorksERM.Models.AppDbContext.Product>
+﻿@model AdventureWorksERM.Models.Production.ViewModels.ProductsViewModel
 @{
     ViewData["Title"] = "Products";
     Layout = "_Layout";
 }
 
-<div class="alert-dark text-center">Category: @ViewBag.Category.Name </div>
-//ToDo: Filter please!!
+<form method="get">
+    <div class="form-inline">
+        <label class="form-control border-dark border-right-0">Category:</label>
+        <select name="category" asp-items="Model.CategoryInfo.Categories" class="form-control pb-1 border-dark border-left-0 custom-select"></select>
+
+        <input type="submit" value="Go!" class="btn btn-dark" />
+    </div>
+</form>
+
+
+
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Name)
+                Name
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ProductNumber)
+                ProductNumber
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Color)
+                Color
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.StandardCost)
+                StandartCost
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ListPrice)
+                ListPrice
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Size)
+                Size
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Weight)
+                Weight
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ProductModel)
+                ProductModel
             </th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
+        @foreach (var item in Model.Products)
         {
             <tr>
                 <td>
