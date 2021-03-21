@@ -13,13 +13,16 @@
     </div>
 </form>
 
-
-
 <table class="table">
     <thead>
         <tr>
             <th>
-                Name
+                <a class="text-dark"
+                   asp-action="Index" asp-route-sort="@ViewData["NameSortParm"]"
+                   asp-route-page="@(Model.PageInfo.PageNumber)"
+                   asp-route-category="@(Model.CategoryInfo.SelectedCategory)">
+                    Name<span class="text-dark small">&varr;</span>
+                </a>
             </th>
             <th>
                 ProductNumber
@@ -28,10 +31,20 @@
                 Color
             </th>
             <th>
-                StandartCost
+               <a class="text-dark"
+                   asp-action="Index" asp-route-sort="@ViewData["CostSortParm"]"
+                   asp-route-page="@(Model.PageInfo.PageNumber)" 
+                   asp-route-category="@(Model.CategoryInfo.SelectedCategory)">
+                    StandartCost<span class="text-dark small">&varr;</span>
+                </a>
             </th>
             <th>
-                ListPrice
+               <a class="text-dark"
+                   asp-action="Index" asp-route-sort="@ViewData["PriceSortParm"]" 
+                   asp-route-page="@(Model.PageInfo.PageNumber)" 
+                   asp-route-category="@(Model.CategoryInfo.SelectedCategory)">
+                    ListPrice<span class="text-dark small">&varr;</span>
+                </a>
             </th>
             <th>
                 Size

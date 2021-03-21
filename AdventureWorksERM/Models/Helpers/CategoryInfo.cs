@@ -12,7 +12,7 @@ namespace AdventureWorksERM.Models.Helpers
     {
         public CategoryInfo(List<ProductCategory> categories, int? category)
         {
-            categories.Insert(0, new ProductCategory { Name = "Все", ProductCategoryId = 0 });
+            categories.Insert(0, new ProductCategory { Name = "All", ProductCategoryId = 0 });
             Categories = new SelectList(categories, "ProductCategoryId", "Name", category);
             SelectedCategory = category;
         }
