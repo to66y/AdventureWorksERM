@@ -1,0 +1,92 @@
+﻿@model AdventureWorksERM.Models.Production.ViewModels.ProductsViewModel
+@{
+    ViewData["Title"] = "Products";
+    Layout = "_Layout";
+}
+
+<form method="get">
+    <div class="form-inline">
+        <label class="form-control border-dark border-right-0">Category:</label>
+        <select name="category" asp-items="Model.CategoryInfo.Categories" class="form-control pb-1 border-dark border-left-0 custom-select"></select>
+
+        <input type="submit" value="Go!" class="btn btn-dark" />
+    </div>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <a class="text-dark"
+                   asp-action="Index" asp-route-sort="@ViewData["NameSortParm"]"
+                   asp-route-page="@(Model.PageInfo.PageNumber)"
+                   asp-route-category="@(Model.CategoryInfo.SelectedCategory)">
+                    Name<span class="text-dark small">&varr;</span>
+                </a>
+            </th>
+            <th>
+                ProductNumber
+            </th>
+            <th>
+                Color
+            </th>
+            <th>
+               <a class="text-dark"
+                   asp-action="Index" asp-route-sort="@ViewData["CostSortParm"]"
+                   asp-route-page="@(Model.PageInfo.PageNumber)" 
+                   asp-route-category="@(Model.CategoryInfo.SelectedCategory)">
+                    StandartCost<span class="text-dark small">&varr;</span>
+                </a>
+            </th>
+            <th>
+               <a class="text-dark"
+                   asp-action="Index" asp-route-sort="@ViewData["PriceSortParm"]" 
+                   asp-route-page="@(Model.PageInfo.PageNumber)" 
+                   asp-route-category="@(Model.CategoryInfo.SelectedCategory)">
+                    ListPrice<span class="text-dark small">&varr;</span>
+                </a>
+            </th>
+            <th>
+                Size
+            </th>
+            <th>
+                Weight
+            </th>
+            <th>
+                ProductModel
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Products)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProductNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Color)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StandardCost)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ListPrice)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Size)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Weight)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProductModel.Name)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+@await Html.PartialAsync("_PagedView")
