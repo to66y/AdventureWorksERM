@@ -86,5 +86,15 @@ namespace AdventureWorksERM_Test
             var result = (await controller.Index("price_desc", category: null) as ViewResult)?.ViewData.Model as ProductsViewModel;
             Assert.Equal("Prod2", result.Products.First().Name); 
         }
+
+        [Fact]
+        public async void SearchTest()
+        {
+            var context = InitTestDB();
+            ProductController controller = new ProductController(context);
+            var searchName = "Prod3";
+            var result = (await controller.Index(search: searchName, sort: null, category: null) as ViewResult)?.ViewData.Model as ProductsViewModel;
+            Assert.Equal("Prod3", result.Products.First().Name);
+        }
     }
 }

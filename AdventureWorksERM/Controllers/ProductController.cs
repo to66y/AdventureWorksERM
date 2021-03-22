@@ -21,10 +21,9 @@ namespace AdventureWorksERM.Controllers
         {
             _context = context;
         }
-        public async Task<IActionResult> Index(string sort, int? category, int page = 1)
+        public async Task<IActionResult> Index(string sort, int? category, string search = "", int page = 1)
         {
-            var source = _context.Products.Include("ProductModel")
-                             .Include("ProductSubcategory");
+            IQueryable<Product> source;
 
             if (category != null && category != 0)
             {
@@ -32,6 +31,16 @@ namespace AdventureWorksERM.Controllers
                             .Include("ProductModel")
                             .Include("ProductSubcategory");
             }
+            else
+            {
+                source = _context.Products.Include("ProductModel")
+                             .Include("ProductSubcategory");
+            }
+            if (!String.IsNullOrEmpty(search))
+            {
+                source = source.Where(x => x.Name.Contains(search));
+            }
+
 
             ViewData["NameSortParm"] = String.IsNullOrEmpty(sort) ? "name_desc" : "";
             ViewData["PriceSortParm"] = sort == "Price" ? "price_desc" : "Price";
@@ -72,6 +81,7 @@ namespace AdventureWorksERM.Controllers
                 Products = items,
                 PageInfo = pageInfo,
                 CategoryInfo = categoryInfo,
+                SearchedName = search,
             };
 
             return View(productsViewModel);

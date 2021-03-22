@@ -4,10 +4,14 @@
     Layout = "_Layout";
 }
 
+<div class="bg-dark text-center text-white h4">Products</div>
 <form method="get">
     <div class="form-inline">
+        <label class="form-control border-dark border-right-0">Search: </label>
+        <input name="search" class="form-control pb-1 border-dark border-left-0" value="@Model.SearchedName" />
+
         <label class="form-control border-dark border-right-0">Category:</label>
-        <select name="category" asp-items="Model.CategoryInfo.Categories" class="form-control pb-1 border-dark border-left-0 custom-select"></select>
+        <select name="category" class="form-control pb-1 border-dark border-left-0 custom-select" asp-items="Model.CategoryInfo.Categories" ></select>
 
         <input type="submit" value="Go!" class="btn btn-dark" />
     </div>
@@ -19,8 +23,10 @@
             <th>
                 <a class="text-dark"
                    asp-action="Index" asp-route-sort="@ViewData["NameSortParm"]"
-                   asp-route-page="@(Model.PageInfo.PageNumber)"
-                   asp-route-category="@(Model.CategoryInfo.SelectedCategory)">
+                   asp-route-page="@Model.PageInfo.PageNumber"
+                   asp-route-search="@Model.SearchedName"
+                   asp-route-category="@Model.CategoryInfo.SelectedCategory">
+
                     Name<span class="text-dark small">&varr;</span>
                 </a>
             </th>
@@ -31,18 +37,21 @@
                 Color
             </th>
             <th>
-               <a class="text-dark"
-                   asp-action="Index" asp-route-sort="@ViewData["CostSortParm"]"
-                   asp-route-page="@(Model.PageInfo.PageNumber)" 
-                   asp-route-category="@(Model.CategoryInfo.SelectedCategory)">
+                <a class="text-dark"
+                   asp-action="Index" 
+                   asp-route-sort="@ViewData["CostSortParm"]"
+                   asp-route-page="@Model.PageInfo.PageNumber"
+                   asp-route-search="@Model.SearchedName"
+                   asp-route-category="@Model.CategoryInfo.SelectedCategory">
                     StandartCost<span class="text-dark small">&varr;</span>
                 </a>
             </th>
             <th>
-               <a class="text-dark"
-                   asp-action="Index" asp-route-sort="@ViewData["PriceSortParm"]" 
-                   asp-route-page="@(Model.PageInfo.PageNumber)" 
-                   asp-route-category="@(Model.CategoryInfo.SelectedCategory)">
+                <a class="text-dark"
+                   asp-action="Index" asp-route-sort="@ViewData["PriceSortParm"]"
+                   asp-route-page="@Model.PageInfo.PageNumber"
+                   asp-route-search="@Model.SearchedName"
+                   asp-route-category="@Model.CategoryInfo.SelectedCategory">
                     ListPrice<span class="text-dark small">&varr;</span>
                 </a>
             </th>

@@ -5,12 +5,14 @@
 <a asp-action="Index"
    asp-route-page="@(Model.PageInfo.PageNumber - 1)"
    asp-route-category="@(Model.CategoryInfo.SelectedCategory)"
+   asp-route-search="@Model.SearchedName"
    class="btn btn-outline-dark @disabledPrev">
     &lArr;
 </a>
 <a asp-action="Index"
    asp-route-page="@(Model.PageInfo.PageNumber + 1)"
    asp-route-category="@(Model.CategoryInfo.SelectedCategory)"
+   asp-route-search="@Model.SearchedName"
    class="btn btn-outline-dark @disabledNext">
     &rArr;
 </a>
