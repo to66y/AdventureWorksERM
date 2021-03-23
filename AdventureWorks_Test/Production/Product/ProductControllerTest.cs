@@ -17,7 +17,7 @@ namespace AdventureWorksERM_Test
 {
     public class ProductControllerTest
     {
-        private AdventureWorksContext InitTestDB()
+        private static AdventureWorksContext InitTestDB()
         {
             var options = new DbContextOptionsBuilder<AdventureWorksContext>()
                 .UseInMemoryDatabase(databaseName: "AWListDatabase" + DateTime.Now.ToFileTimeUtc())
@@ -36,6 +36,10 @@ namespace AdventureWorksERM_Test
             context.ProductSubcategories.Add(new ProductSubcategory { Name = "SubCat2", ProductSubcategoryId = 2, ProductCategoryId = 2 });
             context.ProductSubcategories.Add(new ProductSubcategory { Name = "SubCat3", ProductSubcategoryId = 3, ProductCategoryId = 3 });
 
+            context.ProductPhotos.Add(new ProductPhoto { ProductPhotoId = 1, ThumbNailPhoto = new byte[] { 1, 2, 3 } });
+            context.ProductPhotos.Add(new ProductPhoto { ProductPhotoId = 2, ThumbNailPhoto = new byte[] { 2, 3, 1 } });
+            context.ProductPhotos.Add(new ProductPhoto { ProductPhotoId = 3, ThumbNailPhoto = new byte[] { 3, 1, 2 } });
+
             context.SaveChanges();
 
             return context;
@@ -45,7 +49,7 @@ namespace AdventureWorksERM_Test
         public void HasProductController()
         {
             var context = InitTestDB();
-            ProductController controller = new ProductController(context);
+            ProductController controller = new(context);
             Assert.NotNull(controller);
         }
 
@@ -53,8 +57,8 @@ namespace AdventureWorksERM_Test
         public async void ReturnSomething()
         {
             var context = InitTestDB();
-            ProductController controller = new ProductController(context);
-            var viewResult = (await controller.Index(sort: null, category: null) as ViewResult)?.ViewData.Model;
+            ProductController controller = new(context);
+            var viewResult = (await controller.Index(orderby: null, category: null) as ViewResult)?.ViewData.Model;
             Assert.NotNull(viewResult);
         }
 
@@ -62,9 +66,9 @@ namespace AdventureWorksERM_Test
         public async void NullCategory()
         {
             var context = InitTestDB();
-            ProductController controller = new ProductController(context);
+            ProductController controller = new(context);
             int? category = null;
-            var result = (await controller.Index(sort: null, category) as ViewResult)?.ViewData.Model as ProductsViewModel;
+            var result = (await controller.Index(orderby: null, category) as ViewResult)?.ViewData.Model as ProductsViewModel;
             Assert.NotEmpty(result.Products);
         }
 
@@ -72,9 +76,9 @@ namespace AdventureWorksERM_Test
         public async void FilterByCategory()
         {
             var context = InitTestDB();
-            ProductController controller = new ProductController(context);
+            ProductController controller = new(context);
             int? category = 1;
-            var result = (await controller.Index(sort: null, category) as ViewResult)?.ViewData.Model as ProductsViewModel;
+            var result = (await controller.Index(orderby: null, category) as ViewResult)?.ViewData.Model as ProductsViewModel;
             Assert.Equal("Prod1", result.Products.First().Name);
         }
 
@@ -82,7 +86,7 @@ namespace AdventureWorksERM_Test
         public async void OrderByCostAsc()
         {
             var context = InitTestDB();
-            ProductController controller = new ProductController(context);
+            ProductController controller = new(context);
             var result = (await controller.Index("price_desc", category: null) as ViewResult)?.ViewData.Model as ProductsViewModel;
             Assert.Equal("Prod2", result.Products.First().Name); 
         }
@@ -91,10 +95,20 @@ namespace AdventureWorksERM_Test
         public async void SearchTest()
         {
             var context = InitTestDB();
-            ProductController controller = new ProductController(context);
+            ProductController controller = new(context);
             var searchName = "Prod3";
-            var result = (await controller.Index(search: searchName, sort: null, category: null) as ViewResult)?.ViewData.Model as ProductsViewModel;
+            var result = (await controller.Index(search: searchName, orderby: null, category: null) as ViewResult)?.ViewData.Model as ProductsViewModel;
             Assert.Equal("Prod3", result.Products.First().Name);
+        }
+
+        [Fact]
+        public async void HasPhoto()
+        {
+            var contex = InitTestDB();
+            ProductController controller = new(contex);
+            var searchName = "Prod1";
+            var result = (await controller.Index(search: searchName, orderby: null, category: null) as ViewResult)?.ViewData.Model as ProductsViewModel;
+            Assert.Equal(new byte[] { 1, 2, 3, }, result.ProductPhoto.First().ThumbNailPhoto);
         }
     }
 }

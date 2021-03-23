@@ -12,6 +12,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AdventureWorksERM.Controllers;
 using AdventureWorksERM.Infrastructure;
+using Microsoft.AspNetCore.Identity;
 
 namespace AdventureWorksERM
 {
