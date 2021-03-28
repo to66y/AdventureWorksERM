@@ -1,4 +1,4 @@
-using AdventureWorksERM.Models.AppDbContext;
+using AdventureWorksERM.Models.DbContexts;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using AdventureWorksERM.Controllers;
 using AdventureWorksERM.Infrastructure;
 using Microsoft.AspNetCore.Identity;
+using AdventureWorksERM.Models.Identity;
 
 namespace AdventureWorksERM
 {
@@ -29,9 +30,19 @@ namespace AdventureWorksERM
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-            string connString = Configuration.GetConnectionString("DefaultConnection");
+
+            services.AddDbContext<IdentityContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("IdentityConnection")));
+
+            services.AddIdentity<Account, IdentityRole>()
+                .AddEntityFrameworkStores<IdentityContext>()
+                .AddDefaultTokenProviders();
+
+            string defaultConnString = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<AdventureWorksContext>(options =>
-                options.UseSqlServer(connString));
+                options.UseSqlServer(defaultConnString));
+
+
             //services.AddTransient<IRepository<Product>, ProductRepository>();
             //services.AddTransient<IRepository<ProductCategory>, CategoriesRepository>();
         }
@@ -53,6 +64,8 @@ namespace AdventureWorksERM
             app.UseStaticFiles();
 
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 
