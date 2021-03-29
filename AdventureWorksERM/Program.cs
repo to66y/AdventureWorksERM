@@ -20,7 +20,9 @@ namespace AdventureWorksERM
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseStartup<Startup>();
+                    webBuilder
+                    //.UseSetting(WebHostDefaults.PreventHostingStartupKey, "true")
+                    .UseStartup<Startup>();
                 });
     }
 }

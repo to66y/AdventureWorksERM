@@ -30,13 +30,15 @@ namespace AdventureWorksERM
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            services.AddRazorPages();
 
             services.AddDbContext<IdentityContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("IdentityConnection")));
 
             services.AddIdentity<awUser, IdentityRole>()
                 .AddEntityFrameworkStores<IdentityContext>()
-                .AddDefaultTokenProviders();
+                .AddDefaultTokenProviders()
+                .AddDefaultUI();
 
             string defaultConnString = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<AdventureWorksContext>(options =>
@@ -74,6 +76,7 @@ namespace AdventureWorksERM
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapRazorPages();
             });
         }
     }
