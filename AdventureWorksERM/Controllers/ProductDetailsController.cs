@@ -5,17 +5,39 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using AdventureWorksERM.Models.AppDbContext;
+using AdventureWorksERM.Models.DbContexts;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using AdventureWorksERM.Models.Identity;
+using Newtonsoft.Json.Linq;
+using System.Xml.Linq;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace AdventureWorksERM.Controllers
 {
     public class ProductDetailsController : Controller
     {
         private readonly AdventureWorksContext _context;
+        private readonly UserManager<awUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
-        public ProductDetailsController(AdventureWorksContext context)
+        public ProductDetailsController(AdventureWorksContext context, UserManager<awUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             _context = context;
+            _userManager = userManager;
+            _roleManager = roleManager;
+        }
+
+        //ToDo: comment below and folow ~/ProductDetails/Grant/ to get Admin role
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Grant()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            var role = new IdentityRole("Admin");
+            await _roleManager.CreateAsync(role);
+            await _userManager.AddToRoleAsync(user, "Admin");
+            return Ok();
         }
 
         // GET: ProductDetails
@@ -29,19 +51,54 @@ namespace AdventureWorksERM.Controllers
             var product = await _context.Products //ToDo: Single query or separate?
                 .Include(p => p.ProductModel)
                 .Include(p => p.ProductSubcategory)
-                .Include(p=>p.ProductReviews)
+                .Include(p => p.ProductReviews)
                 .Include(p => p.ProductProductPhotos)
-                .ThenInclude(x=>x.ProductPhoto)
+                .ThenInclude(x => x.ProductPhoto)
                 .FirstOrDefaultAsync(m => m.ProductId == id);
-            
+
             if (product == null)
             {
                 return NotFound();
             }
 
-            return View("UserDetails", product);
+            if (User.IsInRole("Admin"))
+            {
+                return View("AdminDetails", product);
+            }
+            else
+            {
+                return View("UserDetails", product);
+            }
         }
 
+        [HttpPost]
+        public async Task<IActionResult> AddComment(int id, DateTime date, string user, int rating, string comment)
+        {
+            if (String.IsNullOrEmpty(user))
+            {
+                return LocalRedirect("~/Identity/Account/Login");
+            }
+            if (String.IsNullOrEmpty(comment))
+            {
+                return RedirectToAction("Index", new { id });
+            }
+
+            var awuser = await _userManager.FindByIdAsync(user);
+            var review = new ProductReview()
+            {
+                ProductReviewId = 0,
+                ProductId = id,
+                ReviewDate = date,
+                EmailAddress = awuser.Email,
+                Rating = rating,
+                Comments = comment,
+                ReviewerName = awuser.UserName,
+            };
+
+            _context.ProductReviews.Add(review);
+            _context.SaveChanges();
+            return RedirectToAction("Index", new { id });
+        }
 
         // GET: ProductDetails/Create
         public IActionResult Create()

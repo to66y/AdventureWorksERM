@@ -23,7 +23,7 @@
             <th></th>
             <th>
                 <a class="text-dark"
-                   asp-action="Index" asp-route-sort="@ViewData["NameSortParm"]"
+                   asp-action="Index" asp-route-orderby="@ViewData["NameSortParm"]"
                    asp-route-page="@Model.PageInfo.PageNumber"
                    asp-route-search="@Model.SearchedName"
                    asp-route-category="@Model.CategoryInfo.SelectedCategory">
@@ -40,7 +40,7 @@
             <th>
                 <a class="text-dark"
                    asp-action="Index"
-                   asp-route-sort="@ViewData["CostSortParm"]"
+                   asp-route-orderby="@ViewData["CostSortParm"]"
                    asp-route-page="@Model.PageInfo.PageNumber"
                    asp-route-search="@Model.SearchedName"
                    asp-route-category="@Model.CategoryInfo.SelectedCategory">
@@ -49,7 +49,7 @@
             </th>
             <th>
                 <a class="text-dark"
-                   asp-action="Index" asp-route-sort="@ViewData["PriceSortParm"]"
+                   asp-action="Index" asp-route-orderby="@ViewData["PriceSortParm"]"
                    asp-route-page="@Model.PageInfo.PageNumber"
                    asp-route-search="@Model.SearchedName"
                    asp-route-category="@Model.CategoryInfo.SelectedCategory">

@@ -1,4 +1,4 @@
-﻿using AdventureWorksERM.Models.AppDbContext;
+﻿using AdventureWorksERM.Models.DbContexts;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -70,6 +70,7 @@ namespace AdventureWorksERM.Controllers
                 PageInfo = pageInfo,
                 CategoryInfo = categoryInfo,
                 SearchedName = search,
+                OrderBy = orderby,
             };
 
             return View(productsViewModel);
