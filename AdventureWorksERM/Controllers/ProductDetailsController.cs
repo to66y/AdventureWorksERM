@@ -9,6 +9,10 @@ using AdventureWorksERM.Models.DbContexts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using AdventureWorksERM.Models.Identity;
+using Newtonsoft.Json.Linq;
+using System.Xml.Linq;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace AdventureWorksERM.Controllers
 {
@@ -25,7 +29,8 @@ namespace AdventureWorksERM.Controllers
             _roleManager = roleManager;
         }
 
-        [Authorize(Roles="Admin")]
+        //ToDo: comment below and folow ~/ProductDetails/Grant/ to get Admin role
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Grant()
         {
             var user = await _userManager.GetUserAsync(User);
@@ -67,8 +72,31 @@ namespace AdventureWorksERM.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddComment(ProductReview comment, int id)
+        public async Task<IActionResult> AddComment(int id, DateTime date, string user, int rating, string comment)
         {
+            if (String.IsNullOrEmpty(user))
+            {
+                return LocalRedirect("~/Identity/Account/Login");
+            }
+            if (String.IsNullOrEmpty(comment))
+            {
+                return RedirectToAction("Index", new { id });
+            }
+
+            var awuser = await _userManager.FindByIdAsync(user);
+            var review = new ProductReview()
+            {
+                ProductReviewId = 0,
+                ProductId = id,
+                ReviewDate = date,
+                EmailAddress = awuser.Email,
+                Rating = rating,
+                Comments = comment,
+                ReviewerName = awuser.UserName,
+            };
+
+            _context.ProductReviews.Add(review);
+            _context.SaveChanges();
             return RedirectToAction("Index", new { id });
         }
 

@@ -1,8 +1,11 @@
 ﻿@model AdventureWorksERM.Models.DbContexts.Product
+@using Microsoft.AspNetCore.Identity
+@using AdventureWorksERM.Models.Identity
 
 @{
     ViewData["Title"] = "Details";
 }
+@inject UserManager<awUser> UserManager
 
 <div class="bg-dark text-center text-white h4">@Html.DisplayFor(model => model.Name)</div>
 <div>
@@ -124,16 +127,40 @@
     </table>
 }
 <hr />
-    <form asp-action="AddComment">
-        <input type="hidden" name="@Model.ProductReviews" value="@DateTime.Now" />
-        <input type="hidden" value="@User.Identity.Name" />
-        <input type="range" min="1" max="5" value="" />
-        <textarea maxlength="500" cols="123" style="height:128px; resize:none;">
-        </textarea>
-        <input type="submit" value="Add comment" />
-
-    </form>
+<form id="valForm" asp-action="AddComment">
+    <input type="hidden" name="id" value="@Model.ProductId" />
+    <input type="hidden" name="date" value="@DateTime.Now" />
+    <input type="hidden" name="user" value="@UserManager.GetUserId(User)" />
+    <label for="rating">Rate: </label>
+    <input class="custom-range" style="height:5%; width:5%" type="range" name="rating" value="3" min="1" max="5" oninput="this.nextElementSibling.value = this.value">
+    <output>3</output>
+    <textarea name="comment" maxlength="500" cols="123" style="height:128px; resize:none;"></textarea>
+</form>
+<input class="btn btn-outline-dark" form="valForm" type="submit" value="Comment" />
 
 <div>
     <a class="btn btn-outline-dark" href="##" onClick="history.go(-1); return false;">&lArr;</a>
 </div>
+
+@section scripts{
+    <script type="text/javascript">
+        $().ready(function () {
+            $("#valForm").validate({
+                rules: {
+                    comment: {
+                        required: true,
+                        maxlength: 500,
+                        minlength: 3
+                    },
+                },
+                messages: {
+                    comment: {
+                        required: "Write comment...",
+                        maxlength: "Too long",
+                        minlength: "Too short"
+                    },
+                }
+            });
+        });
+    </script>
+}
