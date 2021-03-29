@@ -24,7 +24,7 @@ namespace AdventureWorksERM.Controllers
 
         public IActionResult Index()
         {
-            return View(Context);
+            return RedirectToAction("Index","Product", new { category = 1 });
         }
 
         public IActionResult Privacy()

@@ -6,16 +6,33 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using AdventureWorksERM.Models.DbContexts;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using AdventureWorksERM.Models.Identity;
 
 namespace AdventureWorksERM.Controllers
 {
     public class ProductDetailsController : Controller
     {
         private readonly AdventureWorksContext _context;
+        private readonly UserManager<awUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
-        public ProductDetailsController(AdventureWorksContext context)
+        public ProductDetailsController(AdventureWorksContext context, UserManager<awUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             _context = context;
+            _userManager = userManager;
+            _roleManager = roleManager;
+        }
+
+        [Authorize(Roles="Admin")]
+        public async Task<IActionResult> Grant()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            var role = new IdentityRole("Admin");
+            await _roleManager.CreateAsync(role);
+            await _userManager.AddToRoleAsync(user, "Admin");
+            return Ok();
         }
 
         // GET: ProductDetails
@@ -29,19 +46,31 @@ namespace AdventureWorksERM.Controllers
             var product = await _context.Products //ToDo: Single query or separate?
                 .Include(p => p.ProductModel)
                 .Include(p => p.ProductSubcategory)
-                .Include(p=>p.ProductReviews)
+                .Include(p => p.ProductReviews)
                 .Include(p => p.ProductProductPhotos)
-                .ThenInclude(x=>x.ProductPhoto)
+                .ThenInclude(x => x.ProductPhoto)
                 .FirstOrDefaultAsync(m => m.ProductId == id);
-            
+
             if (product == null)
             {
                 return NotFound();
             }
 
-            return View("UserDetails", product);
+            if (User.IsInRole("Admin"))
+            {
+                return View("AdminDetails", product);
+            }
+            else
+            {
+                return View("UserDetails", product);
+            }
         }
 
+        [HttpPost]
+        public IActionResult AddComment(ProductReview comment, int id)
+        {
+            return RedirectToAction("Index", new { id });
+        }
 
         // GET: ProductDetails/Create
         public IActionResult Create()

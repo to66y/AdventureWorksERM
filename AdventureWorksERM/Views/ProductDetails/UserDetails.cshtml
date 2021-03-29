@@ -123,8 +123,17 @@
         </tbody>
     </table>
 }
-    <hr />
+<hr />
+    <form asp-action="AddComment">
+        <input type="hidden" name="@Model.ProductReviews" value="@DateTime.Now" />
+        <input type="hidden" value="@User.Identity.Name" />
+        <input type="range" min="1" max="5" value="" />
+        <textarea maxlength="500" cols="123" style="height:128px; resize:none;">
+        </textarea>
+        <input type="submit" value="Add comment" />
 
-    <div>
-        <a class="btn btn-outline-dark" href="##" onClick="history.go(-1); return false;">&lArr;</a>
-    </div>
+    </form>
+
+<div>
+    <a class="btn btn-outline-dark" href="##" onClick="history.go(-1); return false;">&lArr;</a>
+</div>
