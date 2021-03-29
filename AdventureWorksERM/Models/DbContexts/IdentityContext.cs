@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace AdventureWorksERM.Models.DbContexts
 {
-    public class IdentityContext : IdentityDbContext<Account>
+    public class IdentityContext : IdentityDbContext<awUser>
     {
         public IdentityContext()
         {
@@ -19,7 +19,7 @@ namespace AdventureWorksERM.Models.DbContexts
         {
         }
 
-        public virtual DbSet<Account> Accounts { get; set; }
+        public virtual DbSet<awUser> AwUsers { get; set; }
 
         //protected override void OnModelCreating(ModelBuilder modelBuilder)
         //{

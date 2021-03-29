@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AdventureWorksERM.Models.Identity
 {
-    public class Account : IdentityUser
+    public class awUser : IdentityUser
     {
     }
 }

@@ -70,6 +70,7 @@ namespace AdventureWorksERM.Controllers
                 PageInfo = pageInfo,
                 CategoryInfo = categoryInfo,
                 SearchedName = search,
+                OrderBy = orderby,
             };
 
             return View(productsViewModel);

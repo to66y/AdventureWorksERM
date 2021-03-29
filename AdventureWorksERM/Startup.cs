@@ -34,7 +34,7 @@ namespace AdventureWorksERM
             services.AddDbContext<IdentityContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("IdentityConnection")));
 
-            services.AddIdentity<Account, IdentityRole>()
+            services.AddIdentity<awUser, IdentityRole>()
                 .AddEntityFrameworkStores<IdentityContext>()
                 .AddDefaultTokenProviders();
 

@@ -83,12 +83,41 @@ namespace AdventureWorksERM_Test
         }
 
         [Fact]
-        public async void OrderByCostAsc()
+        public async void OrderByPriceDesc()
         {
             var context = InitTestDB();
             ProductController controller = new(context);
             var result = (await controller.Index("price_desc", category: null) as ViewResult)?.ViewData.Model as ProductsViewModel;
             Assert.Equal("Prod2", result.Products.First().Name); 
+        }
+
+        [Fact]
+        public async void OrderByPriceAsc()
+        {
+            var context = InitTestDB();
+            ProductController controller = new(context);
+            var result = (await controller.Index("Price", category: null) as ViewResult)?.ViewData.Model as ProductsViewModel;
+            Assert.Equal("Prod1", result.Products.First().Name);
+        }
+
+        [Fact]
+        public async void OrderByNameDesc()
+        {
+            var context = InitTestDB();
+            ProductController controller = new(context);
+            var result = (await controller.Index("name_desc", category: null) as ViewResult)?.ViewData.Model as ProductsViewModel;
+            Assert.Equal("Prod3", result.Products.First().Name);
+        }
+
+        [Fact]
+        public async void OrderByHasValue()
+        {
+            var context = InitTestDB();
+            ProductController controller = new(context);
+            await controller.Index("price_desc", category: null);
+            Assert.NotNull(controller.ViewData["PriceSortParm"]);
+            await controller.Index(orderby: null, category: null);
+            Assert.Equal("name_desc", controller.ViewData["NameSortParm"]);
         }
 
         [Fact]
