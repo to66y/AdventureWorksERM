@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 #nullable disable
 
@@ -32,7 +33,10 @@ namespace AdventureWorksERM.Models.DbContexts
         public string Color { get; set; }
         public short SafetyStockLevel { get; set; }
         public short ReorderPoint { get; set; }
+        [UIHint("Decimal")]
         public decimal StandardCost { get; set; }
+        [DataType(DataType.Currency, ErrorMessage = "The {0} must be positive number")]
+        [Display(Name = nameof(ListPrice))]
         public decimal ListPrice { get; set; }
         public string Size { get; set; }
         public string SizeUnitMeasureCode { get; set; }

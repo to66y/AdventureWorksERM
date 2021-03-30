@@ -16,13 +16,6 @@ namespace AdventureWorksERM.Areas.Identity
         public void Configure(IWebHostBuilder builder)
         {
             builder.ConfigureServices((context, services) => {
-
-                //services.AddDbContext<IdentityContext>(options =>
-                //    options.UseSqlServer(context.Configuration.GetConnectionString("IdentityConnection")));
-
-                //services.AddIdentity<awUser, IdentityRole>()
-                //    .AddEntityFrameworkStores<IdentityContext>()
-                //    .AddDefaultTokenProviders();
             });
         }
     }

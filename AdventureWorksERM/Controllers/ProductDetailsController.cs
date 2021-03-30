@@ -61,7 +61,7 @@ namespace AdventureWorksERM.Controllers
                 return NotFound();
             }
 
-            if (User.IsInRole("Admin"))
+            if (User!=null && User.IsInRole("Admin"))
             {
                 return View("AdminDetails", product);
             }
@@ -69,6 +69,25 @@ namespace AdventureWorksERM.Controllers
             {
                 return View("UserDetails", product);
             }
+        }
+
+        [HttpPost]
+        public IActionResult DeleteComment(int id)
+        {
+            var review = _context.ProductReviews.Find(id);
+            if (review == null)
+            {
+                return NotFound();
+            }
+
+            if (User == null || !User.IsInRole("Admin"))
+            {
+                return Forbid();
+            }
+
+            _context.ProductReviews.Remove(review);
+            _context.SaveChanges();
+            return Redirect(Request.Headers["Referer"].ToString());
         }
 
         [HttpPost]
