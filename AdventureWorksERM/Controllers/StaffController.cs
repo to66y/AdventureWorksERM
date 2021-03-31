@@ -5,11 +5,13 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using AdventureWorksERM.Models.AppDbContext;
+using AdventureWorksERM.Models.DbContexts;
 using AdventureWorksERM.Models.Helpers;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AdventureWorksERM.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class StaffController : Controller
     {
         private readonly AdventureWorksContext _context;

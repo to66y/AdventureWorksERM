@@ -1,0 +1,167 @@
+﻿@model AdventureWorksERM.Models.DbContexts.Product
+@using Microsoft.AspNetCore.Identity
+@using AdventureWorksERM.Models.Identity
+
+@{
+    ViewData["Title"] = "Details";
+}
+@inject UserManager<awUser> UserManager
+
+<div class="bg-dark text-center text-white h4">@Html.DisplayFor(model => model.Name)</div>
+<div>
+    <hr />
+    @{
+        var photo = Model.ProductProductPhotos.Select(x => x.ProductPhoto.LargePhoto).FirstOrDefault(); //ToDo: Incapsulate pls
+        var imgUrl = "data:image;base64," + Convert.ToBase64String(photo);
+        <img src="@imgUrl" alt="no image" />
+    }
+
+    <dl class="row">
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.ProductNumber)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.ProductNumber)
+        </dd>
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.Color)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Color)
+        </dd>
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.StandardCost)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.StandardCost)
+        </dd>
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.ListPrice)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.ListPrice)
+        </dd>
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.Size)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Size)
+        </dd>
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.Weight)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Weight)
+        </dd>
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.Class)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Class)
+        </dd>
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.Style)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Style)
+        </dd>
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.SellStartDate)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.SellStartDate)
+        </dd>
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.SellEndDate)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.SellEndDate)
+        </dd>
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.DiscontinuedDate)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.DiscontinuedDate)
+        </dd>
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.ProductModel)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.ProductModel.Name)
+        </dd>
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.ProductSubcategory)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.ProductSubcategory.Name)
+        </dd>
+    </dl>
+</div>
+<div>
+@foreach (var item in Model.ProductReviews)
+{
+    <hr />
+    <table>
+        <tbody>
+            <tr>
+                <td>
+                    <i>@item.ReviewDate</i>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <b>@item.ReviewerName</b>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Rating: &nbsp; @item.Rating
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Comment: <br /> @item.Comments
+                </td>
+            </tr>
+        </tbody>
+    </table>
+}
+<hr />
+</div>
+<form id="valForm" asp-action="AddComment">
+    <input type="hidden" name="id" value="@Model.ProductId" />
+    <input type="hidden" name="date" value="@DateTime.Now" />
+    <input type="hidden" name="user" value="@UserManager.GetUserId(User)" />
+    <label for="rating">Rate: </label>
+    <input class="custom-range" style="height:5%; width:5%" type="range" name="rating" value="5" min="1" max="5" oninput="this.nextElementSibling.value = this.value">
+    <output>5</output>
+    <textarea name="comment" maxlength="500" cols="123" style="height:128px; resize:none;"></textarea>
+</form>
+<input class="btn btn-outline-dark" form="valForm" type="submit" value="Comment" />
+
+<div>
+    <a class="btn btn-outline-dark" href="##" onClick="history.go(-1); return false;">&lArr;</a>
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+        $().ready(function () {
+            $("#valForm").validate({
+                rules: {
+                    comment: {
+                        required: true,
+                        maxlength: 500,
+                        minlength: 3
+                    },
+                },
+                messages: {
+                    comment: {
+                        required: "Write comment...",
+                        maxlength: "Too long",
+                        minlength: "Too short"
+                    },
+                }
+            });
+        });
+    </script>
+}
