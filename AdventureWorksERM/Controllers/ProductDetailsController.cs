@@ -40,7 +40,6 @@ namespace AdventureWorksERM.Controllers
             return Ok();
         }
 
-        // GET: ProductDetails
         public async Task<IActionResult> Index(int? id)
         {
             if (id == null)
@@ -48,7 +47,7 @@ namespace AdventureWorksERM.Controllers
                 return NotFound();
             }
 
-            var product = await _context.Products //ToDo: Single query or separate?
+            var product = await _context.Products
                 .Include(p => p.ProductModel)
                 .Include(p => p.ProductSubcategory)
                 .Include(p => p.ProductReviews)
@@ -119,7 +118,7 @@ namespace AdventureWorksERM.Controllers
             return RedirectToAction("Index", new { id });
         }
 
-        // GET: ProductDetails/Create
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             ViewData["ProductModelId"] = new SelectList(_context.ProductModels, "ProductModelId", "Name");
@@ -129,9 +128,7 @@ namespace AdventureWorksERM.Controllers
             return View();
         }
 
-        // POST: ProductDetails/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ProductId,Name,ProductNumber,MakeFlag,FinishedGoodsFlag,Color,SafetyStockLevel,ReorderPoint,StandardCost,ListPrice,Size,SizeUnitMeasureCode,WeightUnitMeasureCode,Weight,DaysToManufacture,ProductLine,Class,Style,ProductSubcategoryId,ProductModelId,SellStartDate,SellEndDate,DiscontinuedDate,Rowguid,ModifiedDate")] Product product)
@@ -149,7 +146,6 @@ namespace AdventureWorksERM.Controllers
             return View(product);
         }
 
-        // GET: ProductDetails/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -169,9 +165,6 @@ namespace AdventureWorksERM.Controllers
             return View(product);
         }
 
-        // POST: ProductDetails/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("ProductId,Name,ProductNumber,MakeFlag,FinishedGoodsFlag,Color,SafetyStockLevel,ReorderPoint,StandardCost,ListPrice,Size,SizeUnitMeasureCode,WeightUnitMeasureCode,Weight,DaysToManufacture,ProductLine,Class,Style,ProductSubcategoryId,ProductModelId,SellStartDate,SellEndDate,DiscontinuedDate,Rowguid,ModifiedDate")] Product product)
@@ -199,7 +192,7 @@ namespace AdventureWorksERM.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index), new { id = id });
             }
             ViewData["ProductModelId"] = new SelectList(_context.ProductModels, "ProductModelId", "Name", product.ProductModelId);
             ViewData["ProductSubcategoryId"] = new SelectList(_context.ProductSubcategories, "ProductSubcategoryId", "Name", product.ProductSubcategoryId);
@@ -208,7 +201,7 @@ namespace AdventureWorksERM.Controllers
             return View(product);
         }
 
-        // GET: ProductDetails/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -230,7 +223,7 @@ namespace AdventureWorksERM.Controllers
             return View(product);
         }
 
-        // POST: ProductDetails/Delete/5
+        [Authorize(Roles = "Admin")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

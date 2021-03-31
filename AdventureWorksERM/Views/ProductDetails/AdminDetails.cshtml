@@ -105,6 +105,13 @@
             <tbody>
                 <tr>
                     <td>
+                        <form asp-action="DeleteComment" asp-route-id="@item.ProductReviewId">
+                            <input class="btn btn-outline-danger" style="line-height:10px;padding:0px 2px 3px 2px;" type="submit" value="x" />
+                        </form>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
                         <i>@item.ReviewDate</i>
                     </td>
                 </tr>
@@ -121,13 +128,6 @@
                 <tr>
                     <td>
                         Comment: <br /> @item.Comments
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <form asp-action="DeleteComment" asp-route-id="@item.ProductReviewId">
-                            <input class="btn btn-outline-danger py-0 px-1 m-0" type="submit" value="Delete" />
-                        </form>
                     </td>
                 </tr>
             </tbody>
