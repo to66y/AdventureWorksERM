@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 #nullable disable
 
-namespace AdventureWorksERM.Models.AppDbContext
+namespace AdventureWorksERM.Models.DbContexts
 {
     public partial class CountryRegion
     {

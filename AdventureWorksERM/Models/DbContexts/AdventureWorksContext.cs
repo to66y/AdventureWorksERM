@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 #nullable disable
 
-namespace AdventureWorksERM.Models.AppDbContext
+namespace AdventureWorksERM.Models.DbContexts
 {
     public partial class AdventureWorksContext : DbContext
     {

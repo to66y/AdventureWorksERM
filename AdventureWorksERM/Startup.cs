@@ -1,4 +1,4 @@
-using AdventureWorksERM.Models.AppDbContext;
+using AdventureWorksERM.Models.DbContexts;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -12,6 +12,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using AdventureWorksERM.Controllers;
 using AdventureWorksERM.Infrastructure;
+using Microsoft.AspNetCore.Identity;
+using AdventureWorksERM.Models.Identity;
 
 namespace AdventureWorksERM
 {
@@ -28,9 +30,22 @@ namespace AdventureWorksERM
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-            string connString = Configuration.GetConnectionString("DefaultConnection");
+            services.AddRazorPages();
+            services.AddDatabaseDeveloperPageExceptionFilter();
+
+            services.AddDbContext<IdentityContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("IdentityConnection")));
+
+            services.AddIdentity<awUser, IdentityRole>()
+                .AddEntityFrameworkStores<IdentityContext>()
+                .AddDefaultTokenProviders()
+                .AddDefaultUI();
+
+            string defaultConnString = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<AdventureWorksContext>(options =>
-                options.UseSqlServer(connString));
+                options.UseSqlServer(defaultConnString));
+
+
             //services.AddTransient<IRepository<Product>, ProductRepository>();
             //services.AddTransient<IRepository<ProductCategory>, CategoriesRepository>();
         }
@@ -41,6 +56,7 @@ namespace AdventureWorksERM
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseMigrationsEndPoint();
             }
             else
             {
@@ -53,6 +69,8 @@ namespace AdventureWorksERM
 
             app.UseRouting();
 
+            app.UseAuthentication();
+
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
@@ -60,6 +78,7 @@ namespace AdventureWorksERM
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapRazorPages();
             });
         }
     }
