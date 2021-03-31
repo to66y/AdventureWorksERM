@@ -11,7 +11,7 @@
         <input name="search" class="form-control pb-1 border-dark border-left-0" value="@Model.SearchedName" />
 
         <label class="form-control border-dark border-right-0">Category:</label>
-        <select name="category" class="form-control pb-1 border-dark border-left-0 custom-select" asp-items="Model.CategoryInfo.Categories" ></select>
+        <select name="category" class="form-control pb-1 border-dark border-left-0 custom-select" asp-items="Model.CategoryInfo.Categories"></select>
 
         <input type="submit" value="Go!" class="btn btn-dark" />
     </div>
@@ -20,9 +20,10 @@
 <table class="table">
     <thead>
         <tr>
+            <th></th>
             <th>
                 <a class="text-dark"
-                   asp-action="Index" asp-route-sort="@ViewData["NameSortParm"]"
+                   asp-action="Index" asp-route-orderby="@ViewData["NameSortParm"]"
                    asp-route-page="@Model.PageInfo.PageNumber"
                    asp-route-search="@Model.SearchedName"
                    asp-route-category="@Model.CategoryInfo.SelectedCategory">
@@ -38,8 +39,8 @@
             </th>
             <th>
                 <a class="text-dark"
-                   asp-action="Index" 
-                   asp-route-sort="@ViewData["CostSortParm"]"
+                   asp-action="Index"
+                   asp-route-orderby="@ViewData["CostSortParm"]"
                    asp-route-page="@Model.PageInfo.PageNumber"
                    asp-route-search="@Model.SearchedName"
                    asp-route-category="@Model.CategoryInfo.SelectedCategory">
@@ -48,7 +49,7 @@
             </th>
             <th>
                 <a class="text-dark"
-                   asp-action="Index" asp-route-sort="@ViewData["PriceSortParm"]"
+                   asp-action="Index" asp-route-orderby="@ViewData["PriceSortParm"]"
                    asp-route-page="@Model.PageInfo.PageNumber"
                    asp-route-search="@Model.SearchedName"
                    asp-route-category="@Model.CategoryInfo.SelectedCategory">
@@ -69,7 +70,13 @@
     <tbody>
         @foreach (var item in Model.Products)
         {
-            <tr>
+            var href = "ProductDetails/Index/" + item.ProductId;  //TODO: Incapsulate This All
+            <tr class="clickable-row" data-href="@href">
+                <td>
+                    @{var photo = item.ProductProductPhotos.Select(p => p.ProductPhoto.ThumbNailPhoto).First(); }
+                    @{var imgUrl = "data:image;base64," + Convert.ToBase64String(photo); }
+                    <img src="@imgUrl" alt="no image" />
+                </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Name)
                 </td>
@@ -99,3 +106,14 @@
     </tbody>
 </table>
 @await Html.PartialAsync("_PagedView")
+
+@section scripts{ 
+<script>
+    jQuery(document).ready(function ($) {
+        $(".clickable-row").click(function () {
+            window.location = $(this).data("href");
+        });
+    });
+</script>
+}
+

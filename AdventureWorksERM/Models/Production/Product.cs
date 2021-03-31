@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 #nullable disable
 
-namespace AdventureWorksERM.Models.AppDbContext
+namespace AdventureWorksERM.Models.DbContexts
 {
     public partial class Product
     {
