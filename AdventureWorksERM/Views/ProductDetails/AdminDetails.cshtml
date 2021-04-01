@@ -143,7 +143,9 @@
     <label for="rating">Rate: </label>
     <input class="custom-range" style="height:5%; width:5%" type="range" name="rating" value="5" min="1" max="5" oninput="this.nextElementSibling.value = this.value">
     <output>5</output>
-    <textarea name="comment" maxlength="500" cols="123" style="height:128px; resize:none;"></textarea>
+    <div>
+        <textarea name="comment" maxlength="500" cols="123" style="height:128px; resize:none;"></textarea>
+    </div>
 </form>
 <input class="btn btn-outline-dark" form="valForm" type="submit" value="Comment" />
 

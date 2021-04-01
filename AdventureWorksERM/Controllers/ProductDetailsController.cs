@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -9,10 +8,6 @@ using AdventureWorksERM.Models.DbContexts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using AdventureWorksERM.Models.Identity;
-using Newtonsoft.Json.Linq;
-using System.Xml.Linq;
-using System.Security.Claims;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace AdventureWorksERM.Controllers
 {

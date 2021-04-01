@@ -1,15 +1,11 @@
 ﻿using AdventureWorksERM.Models.DbContexts;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using AdventureWorksERM.Models.Helpers;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using AdventureWorksERM.Models.Production.ViewModels;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
-using Microsoft.Data.SqlClient;
 
 namespace AdventureWorksERM.Controllers
 {
