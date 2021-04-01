@@ -1,12 +1,7 @@
 ﻿using AdventureWorksERM.Controllers;
 using AdventureWorksERM.Models.DbContexts;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
-using System.Collections;
 
 namespace AdventureWorksERM.Infrastructure
 {

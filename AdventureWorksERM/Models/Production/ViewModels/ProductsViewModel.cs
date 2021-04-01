@@ -1,9 +1,6 @@
 ﻿using AdventureWorksERM.Models.DbContexts;
 using AdventureWorksERM.Models.Helpers;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace AdventureWorksERM.Models.Production.ViewModels
 {
